@@ -75,6 +75,17 @@ class OrganizationService(gdata.apps.service.PropertyService):
         properties['usersToMove'] += user+', '
     return self._PutProperties(uri, properties)
 
+  def UpdateUserOrganization(self, user, new_name, old_name=None, customer_id=None):
+
+    if customer_id == None:
+      customer_id = self.RetrieveCustomerId()['customerId']
+    uri = '/a/feeds/orguser/2.0/%s/%s' % (customer_id, urllib.quote_plus(user))
+    properties = {}
+    properties['orgUnitPath'] = new_name
+    if old_name != None:
+      properties['oldOrgUnitPath'] = old_name
+    return self._PutProperties(uri, properties)
+
   def RetrieveOrganizationUnit(self, name):
 
     customer_id = self.RetrieveCustomerId()['customerId']
@@ -133,7 +144,7 @@ class OrganizationService(gdata.apps.service.PropertyService):
     except AttributeError:
       pass
     return org
-    
+
   def RetrieveAllOrganizationUsers(self):
   
     customer_id = self.RetrieveCustomerId()['customerId']

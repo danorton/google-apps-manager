@@ -142,6 +142,23 @@ class DocsClient(gdata.client.GDClient):
 
   GetDocList = get_doclist
 
+  def get_metadata(self, auth_token=None, **kwargs):
+    """Retrieves user metadata.
+
+    Args:
+      auth_token: (optional) gdata.gauth.ClientLoginToken, AuthSubToken, or
+          OAuthToken which authorizes this client to edit the user's data.
+      kwargs: Other parameters to pass to self.get_entry().
+
+    Returns:
+      A metadata feed.
+
+    """
+    return self.get_entry('https://docs.google.com/feeds/metadata/default',
+        auth_token=auth_token, **kwargs)
+
+  GetMetadata = get_metadata
+
   def get_doc(self, resource_id, etag=None, auth_token=None, **kwargs):
     """Retrieves a particular document given by its resource id.
 

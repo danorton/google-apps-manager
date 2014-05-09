@@ -54,35 +54,29 @@ class AdminAuditService(gdata.apps.service.PropertyService):
     self.port = 443
     self.domain = domain
 
-  def retrieve_audit(self, customer_id, admin=None, event=None, start_date=None, end_date=None):
+  def retrieve_audit(self, customer_id, admin=None, event=None, start_date=None, end_date=None, max_results=None):
     """Retrieves an audit
 
     """
     uri = '/apps/reporting/audit/v1/%s/207535951991' % customer_id
-    amp = False
+    use_char = '?'
     if admin != None:
-      uri += '?actorEmail=%s' % admin
-      amp = True
+      uri += '%sactorEmail=%s' % (use_char, admin)
+      use_char = '&'
     if event != None:
-      if not amp:
-        uri += '&eventName=%s' % event
-        amp = True
-      else:
-        uri += '?eventName=%s' % event
+      uri += '%seventName=%s' % (use_char, event)
+      use_char = '&'
     if start_date != None:
-      if not amp:
-        uri += '&startTime=%s' % start_date
-        amp = True
-      else:
-        uri += '?startTime=%s' % start_date
+      uri += '%sstartTime=%s' % (use_char, start_date)
+      use_char = '&'
     if end_date != None:
-      if not amp:
-        uri += '&endTime=%s' % end_date
-      else:
-        uri += '?endTime=%s' % end_date
-        
-    json_data = self.Get(uri, converter=str)
-    #return json.loads(json_data)
-    return json_data
-
+      uri += '%sendTime=%s' % (use_char, end_date)
+      use_char = '&'
+    if max_results != None:
+      uri += '%smaxResults=%s' % (use_char, max_results)
+    try:
+      return self.Get(uri, converter=str)
+    except gdata.service.RequestError, e:
+      raise gdata.apps.service.AppsForYourDomainException(e.args[0])
+    
   RetrieveAudit = retrieve_audit

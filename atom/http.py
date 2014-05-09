@@ -61,7 +61,7 @@ class TestConfigurationError(Exception):
   pass
 
 
-DEFAULT_CONTENT_TYPE = 'application/atom+xml'
+DEFAULT_CONTENT_TYPE = 'application/atom+xml; charset=UTF-8'
 
 
 class HttpClient(atom.http_interface.GenericHttpClient):

@@ -78,7 +78,7 @@ class AdminSettingsService(gdata.apps.service.PropertyService):
     uri = self._serviceUrl('general/defaultLanguage')
     properties = {'defaultLanguage': defaultLanguage}
     return self._PutProperties(uri, properties)
-
+    
   def GetOrganizationName(self):
     """Gets Domain Default Language
 
@@ -260,7 +260,7 @@ class AdminSettingsService(gdata.apps.service.PropertyService):
 
     return self.genericGet('verification/cname')
 
-  def UpdateCNAMEVerificationStatus(self, verified):
+  def UpdateCNAMEVerificationStatus(self, verified='true'):
     """Updates CNAME Verification Status
 
     Args:
@@ -283,7 +283,7 @@ class AdminSettingsService(gdata.apps.service.PropertyService):
 
     return self.genericGet('verification/mx')
 
-  def UpdateMXVerificationStatus(self, verified):
+  def UpdateMXVerificationStatus(self, verified='true'):
     """Updates MX Verification Status
 
     Args:

@@ -75,8 +75,7 @@ class AppsForYourDomainException(Error):
       self.reason = self.element_tree[0].attrib['reason']
       self.invalidInput = self.element_tree[0].attrib['invalidInput']
     except:
-      self.error_code = UNKOWN_ERROR
-
+      self.error_code = 600
 
 class AppsService(gdata.service.GDataService):
   """Client for the Google Apps Provisioning service."""
@@ -478,8 +477,10 @@ class PropertyService(gdata.service.GDataService):
   def AddAllElementsFromAllPages(self, link_finder, func):
     """retrieve all pages and add all elements"""
     next = link_finder.GetNextLink()
+    count = 0
     while next is not None:
       next_feed = self.Get(next.href, converter=func)
+      count = count + len(next_feed.entry)
       for a_entry in next_feed.entry:
         link_finder.entry.append(a_entry)
       next = next_feed.GetNextLink()

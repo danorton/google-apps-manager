@@ -72,7 +72,7 @@ class EmailSettingsService(gdata.apps.service.PropertyService):
     """
     label = urllib.quote_plus(label, '')
     uri = self._serviceUrl('label/%s' % label, username)
-    return self.Delete(uri)
+    return self._DeleteProperties(uri)
     
   def GetLabels(self, username):
     """Get labels for a user.

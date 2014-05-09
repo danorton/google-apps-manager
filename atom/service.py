@@ -36,6 +36,7 @@ import atom.http
 import atom.token_store
 
 import os
+import types
 import httplib
 import urllib
 import re
@@ -170,6 +171,9 @@ class AtomService(object):
     if headers:
       all_headers.update(headers)
 
+    if isinstance(data, types.StringTypes):
+      data = data.encode('utf-8')
+    
     # If the list of headers does not include a Content-Length, attempt to
     # calculate it based on the data object.
     if data and 'Content-Length' not in all_headers:
@@ -177,6 +181,7 @@ class AtomService(object):
       if content_length:
         all_headers['Content-Length'] = str(content_length)
 
+    all_headers['GData-Version'] = '2.0'
     # Find an Authorization token for this URL if one is available.
     if self.override_token:
       auth_token = self.override_token
@@ -227,7 +232,7 @@ class AtomService(object):
                         url_params=url_params)
 
   def Post(self, data, uri, extra_headers=None, url_params=None, 
-           escape_params=True, content_type='application/atom+xml'):
+           escape_params=True, content_type='application/atom+xml; charset=UTF-8'):
     """Insert data into an APP server at the given URI.
 
     Args:
@@ -259,7 +264,7 @@ class AtomService(object):
                         url_params=url_params)
 
   def Put(self, data, uri, extra_headers=None, url_params=None, 
-           escape_params=True, content_type='application/atom+xml'):
+           escape_params=True, content_type='application/atom+xml; charset=UTF-8'):
     """Updates an entry at the given URI.
      
     Args:
@@ -600,7 +605,7 @@ def BuildUri(uri, url_params=None, escape_params=True):
 
   
 def HttpRequest(service, operation, data, uri, extra_headers=None, 
-    url_params=None, escape_params=True, content_type='application/atom+xml'):
+    url_params=None, escape_params=True, content_type='application/atom+xml; charset=UTF-8'):
   """Performs an HTTP call to the server, supports GET, POST, PUT, and DELETE.
   
   This method is deprecated, use atom.http.HttpClient.request instead.

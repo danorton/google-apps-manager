@@ -1287,7 +1287,7 @@ class GDataService(atom.service.AtomService):
         
       multipart = []
       multipart.append('Media multipart posting\r\n--END_OF_PART\r\n' + \
-          'Content-Type: application/atom+xml\r\n\r\n')
+          'Content-Type: application/atom+xml; charset=UTF-8\r\n\r\n')
       multipart.append('\r\n--END_OF_PART\r\nContent-Type: ' + \
           media_source.content_type+'\r\n\r\n')
       multipart.append('\r\n--END_OF_PART--\r\n')
@@ -1315,8 +1315,8 @@ class GDataService(atom.service.AtomService):
 
     else:
       http_data = data
-      content_type = 'application/atom+xml'
-      extra_headers['Content-Type'] = content_type
+      #content_type = 'application/atom+xml; charset=UTF-8'
+      #extra_headers['Content-Type'] = content_type
       server_response = self.request(verb, uri, data=http_data,
           headers=extra_headers, url_params=url_params)
       result_body = server_response.read()

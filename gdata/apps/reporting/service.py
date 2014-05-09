@@ -83,11 +83,17 @@ class ReportService(gdata.apps.service.PropertyService):
     <reportType>daily</reportType>
     <reportName>%s</reportName>
 </rest>''' % (self.domain, date, page, report)
-      report_page = self.Post(xml, uri, converter=str)
+      try:
+        report_page = self.Post(xml, uri, converter=str)
+      except gdata.service.RequestError, e:
+        raise gdata.apps.service.AppsForYourDomainException(e.args[0])
       if report_page == 'End-Of-Report':
         return report_data
       else:
-        report_data += report_page
+        if page == 1:
+          report_data += report_page # 1st page has headers
+        else:
+          report_data += report_page[report_page.find('\n')+1:] # remove header on additional pages
         page = page + 1
 
   RetrieveReport = retrieve_report
